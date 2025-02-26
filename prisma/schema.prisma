@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(STAFF)
+  accounts      Account[]
+  sessions      Session[]
+  chats         Chat[]
+}
+
+enum UserRole {
+  ADMIN
+  STAFF
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model InventoryItem {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  code              String          @unique
+  name              String
+  category          String
+  description       String?
+  quantity          Int             @default(0)
+  unit              String          @default("piece")
+  attributes        Json?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  messageReferences ItemReference[]
+}
+
+model Chat {
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String        @db.ObjectId
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  createdAt DateTime      @default(now())
+  messages  ChatMessage[]
+}
+
+model ChatMessage {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  chatId         String          @db.ObjectId
+  chat           Chat            @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  role           String          @default("user") // user/assistant
+  content        String
+  createdAt      DateTime        @default(now())
+  itemReferences ItemReference[]
+}
+
+model ItemReference {
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  messageId String        @db.ObjectId
+  itemId    String        @db.ObjectId
+  message   ChatMessage   @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  item      InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, itemId])
+}
