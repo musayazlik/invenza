@@ -63,15 +63,17 @@ model VerificationToken {
 
 model InventoryItem {
   id                String          @id @default(auto()) @map("_id") @db.ObjectId
-  code              String          @unique
-  name              String
+  itemName          String
+  itemCode          String
   category          String
-  description       String?
-  quantity          Int             @default(0)
-  unit              String          @default("piece")
-  attributes        Json?
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  subCategory       String
+  description       String
+  unit              String
+  alternativeltems  String[]
+  suppliers         String[]
+  storageLocation   String
+  minimumStock      Int
+  reorderLevel      Int
   messageReferences ItemReference[]
 }
 
