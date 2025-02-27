@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import systemDirectiveText from "@/constants";
 
 // Google Gemini istemcisi oluşturma
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
@@ -168,16 +169,7 @@ ${JSON.stringify(inventoryData, null, 2)}
     });
 
     // Sistem direktifi
-    const systemDirective = `Sen Invenza Otel Stok Yönetim Sistemi'nin bir parçası olan bir AI asistansın. 
-    Kullanıcılara stok durumu, ürün bilgileri, tedarikçiler, sipariş hazırlama ve menü önerileri 
-    konularında yardımcı olursun. Türkçe yanıt ver ve profesyonel ve yardımsever ol.
-    
-    Aşağıdaki stok veritabanında bulunan gerçek verilere göre soruları yanıtla. Bu veriler güncel stok durumunu göstermektedir.
-    Eğer soru bir stok ürünü hakkındaysa ve o ürün veritabanında bulunuyorsa, o ürünün tüm detaylarını kullan.
-    Eğer soru bir ürün hakkında ama o ürün veritabanında yoksa, veritabanında bulunmadığını açıkça belirt.
-    Yanıtlarında her zaman en doğru ve güncel bilgileri kullan.
-    
-    ${inventoryContext}`;
+    const systemDirective = `${systemDirectiveText} \n\n ${inventoryContext}`;
 
     // Gemini'den yanıt alma
     const result = await geminiChat.sendMessage(
