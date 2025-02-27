@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 // PrismaClient'ın geliştirme sırasında birden çok kez yeniden yüklenmesini önlemek için
 // global nesnesine bağlanması
 declare global {
+	// eslint-disable-next-line no-var
 	var prisma: PrismaClient | undefined;
 }
 
