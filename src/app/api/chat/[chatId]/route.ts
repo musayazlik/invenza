@@ -1,22 +1,16 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+type Params = Promise<{ chatId: string }>;
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { chatId: string } }
-) {
+export async function DELETE(req: Request, { params }: { params: Params }) {
   try {
-    console.log(req.body);
-
     const session = await auth();
+    const { chatId } = await params;
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Oturum gerekli" }, { status: 401 });
     }
-
-    // Params parametrelerini güvenli bir şekilde al
-    const { chatId } = await params;
 
     const userId = session.user.id;
 
