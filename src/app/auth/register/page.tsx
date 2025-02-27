@@ -1,8 +1,10 @@
 import FormCard from "./_components/form-card";
 
-export const metadata = {
-  title: "Kayıt Ol",
-  description: "Kayıt olma sayfası",
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Register",
+  description: "Register page",
 };
 
 const Register = () => {
