@@ -1,9 +1,15 @@
 import Header from "@/components/panel/layout/Header";
 import Footer from "@/components/panel/layout/Footer";
+import { Metadata } from "next";
 
 interface PanelLayoutProps {
   children: React.ReactNode;
 }
+
+export const metadata: Metadata = {
+  title: "Invenza Chat Panel",
+  description: "Invenza Chat Panel",
+};
 
 export default function PanelLayout({ children }: PanelLayoutProps) {
   return (
