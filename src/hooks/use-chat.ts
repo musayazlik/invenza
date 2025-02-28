@@ -3,6 +3,11 @@ import { Chat, Message, ModelType } from "@/types/chat";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import {
+  getUserChats,
+  sendChatMessage,
+  deleteUserChat,
+} from "@/services/chat/chat.service";
 
 export const useChat = () => {
   const [chats, setChats] = useState<Chat[]>([]);
@@ -20,33 +25,10 @@ export const useChat = () => {
 
       try {
         setIsLoadingChats(true);
-
-        // GET isteğini ayarlarla birlikte gönder
-        const response = await fetch("/api/chat/user-chats", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // credentials: 'include' ekleyin
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          throw new Error("Sohbetler yüklenemedi");
-        }
-
-        const data = await response.json();
-
-        // null kontrollü veri ataması
-        if (data && Array.isArray(data.chats)) {
-          setChats(data.chats);
-        } else {
-          // Veri boşsa boş array kullan
-          setChats([]);
-        }
+        const fetchedChats = await getUserChats();
+        setChats(fetchedChats);
       } catch (error) {
         console.error("Sohbet yükleme hatası:", error);
-        // Hata durumunda boş liste kullan
         setChats([]);
       } finally {
         setIsLoadingChats(false);
@@ -54,7 +36,6 @@ export const useChat = () => {
     };
 
     console.log("useEffect: çağrıldı");
-
     fetchChats();
   }, [session, status]);
 
@@ -70,7 +51,6 @@ export const useChat = () => {
     setActiveChat(null);
 
     console.log("Yeni sohbet oluşturuldu");
-
     window.scrollTo(0, 0);
   }, [session]);
 
@@ -82,14 +62,7 @@ export const useChat = () => {
       console.log("Sohbet silme", chatId);
 
       try {
-        // Önce API'ye silme isteği gönder
-        const response = await fetch(`/api/chat/${chatId}`, {
-          method: "DELETE",
-        });
-
-        if (!response.ok) {
-          throw new Error("Sohbet silinemedi");
-        }
+        await deleteUserChat(chatId);
 
         // API başarılı olduktan sonra UI güncellemesi yap
         setChats((prev) => {
@@ -169,24 +142,8 @@ export const useChat = () => {
 
         setInput("");
 
-        // API isteği ve yanıt işleme...
-        const response = await fetch("/api/chat/gemini", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            messages: [{ role: "user", content: message }],
-            chatId: isNewChat ? null : chatId,
-            title: isNewChat ? message.substring(0, 30) : undefined,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(await response.text());
-        }
-
-        const data = await response.json();
+        // Servis fonksiyonu ile API isteği gönder
+        const data = await sendChatMessage(message, chatId);
 
         // AI yanıtını ekle
         const assistantMessage: Message = {
@@ -232,7 +189,7 @@ export const useChat = () => {
         setIsLoading(false);
       }
     },
-    [session] // activeChat'i dependency array'den kaldırdık
+    [session]
   );
 
   // Sohbetleri yeniden yükleme
@@ -243,33 +200,10 @@ export const useChat = () => {
 
     try {
       setIsLoadingChats(true);
-
-      // GET isteğini ayarlarla birlikte gönder
-      const response = await fetch("/api/chat/user-chats", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // credentials: 'include' ekleyin
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Sohbetler yüklenemedi");
-      }
-
-      const data = await response.json();
-
-      // null kontrollü veri ataması
-      if (data && Array.isArray(data.chats)) {
-        setChats(data.chats);
-      } else {
-        // Veri boşsa boş array kullan
-        setChats([]);
-      }
+      const fetchedChats = await getUserChats();
+      setChats(fetchedChats);
     } catch (error) {
       console.error("Sohbet yükleme hatası:", error);
-      // Hata durumunda boş liste kullan
       setChats([]);
     } finally {
       setIsLoadingChats(false);
