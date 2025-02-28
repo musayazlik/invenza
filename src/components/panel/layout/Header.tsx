@@ -1,9 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { User, LogOut, Settings, Home, MessageSquare } from "lucide-react";
+import {
+  User,
+  LogOut,
+  Settings,
+  Home,
+  MessageSquare,
+  Menu,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,9 +21,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut } from "next-auth/react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Header = () => {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigation = [
     { name: "Ana Sayfa", href: "/panel", icon: Home },
@@ -31,14 +46,60 @@ const Header = () => {
     <header className="bg-white shadow">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
+          {/* Logo and Mobile Menu Button */}
           <div className="flex items-center">
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+              <SheetTrigger asChild className="md:hidden mr-2">
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[240px] sm:w-[300px]">
+                <SheetHeader className="px-2 pt-6 pb-2">
+                  <SheetTitle className="text-left">
+                    <Link
+                      href="/panel"
+                      className="text-xl font-bold text-blue-600"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Invenza
+                    </Link>
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="px-2 py-2">
+                  <nav className="flex flex-col space-y-1">
+                    {navigation.map((item) => {
+                      const isActive = pathname === item.href;
+                      const Icon = item.icon;
+
+                      return (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`px-3 py-2 text-sm font-medium rounded-md flex items-center ${
+                            isActive
+                              ? "bg-blue-50 text-blue-700"
+                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                          }`}
+                        >
+                          <Icon className="mr-3 h-5 w-5" />
+                          {item.name}
+                        </Link>
+                      );
+                    })}
+                  </nav>
+                </div>
+              </SheetContent>
+            </Sheet>
+
             <Link href="/panel" className="text-xl font-bold text-blue-600">
               Invenza
             </Link>
           </div>
 
-          {/* Navigation */}
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
