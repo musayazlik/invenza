@@ -21,13 +21,6 @@ export async function POST(req: Request) {
     // İstek gövdesinden verileri alma
     const { messages, chatId, title } = await req.json();
 
-    // API isteğini logla
-    console.log("API Parametreleri:", {
-      chatId: chatId || "Yok (yeni sohbet)",
-      title: title || "Başlık yok",
-      mesajSayısı: messages?.length || 0,
-    });
-
     // Mesaj kontrolü
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
@@ -51,7 +44,6 @@ export async function POST(req: Request) {
 
     // Frontend'den null veya undefined geliyorsa veya boş string geliyorsa, yeni sohbet olarak kabul et
     if (!chatId) {
-      console.log("Yeni sohbet oluşturuluyor - chatId tanımlı değil");
       isNewChat = true;
     } else {
       try {
@@ -71,16 +63,13 @@ export async function POST(req: Request) {
         });
 
         if (!chat) {
-          console.log(
-            `Sohbet bulunamadı: ${chatId}, yeni sohbet oluşturuluyor`
-          );
           isNewChat = true;
         } else {
-          console.log(`Mevcut sohbet bulundu: ${chatId}`);
+          isNewChat = false;
         }
       } catch (error) {
         console.error("Sohbet arama hatası:", error);
-        console.log("Hata nedeniyle yeni sohbet oluşturuluyor");
+
         isNewChat = true;
       }
     }
@@ -99,7 +88,6 @@ export async function POST(req: Request) {
           messages: true,
         },
       });
-      console.log(`Yeni sohbet oluşturuldu: ${chat.id}`);
     }
 
     // Chat null kontrolü

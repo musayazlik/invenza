@@ -34,8 +34,6 @@ export const useChat = () => {
         setIsLoadingChats(false);
       }
     };
-
-    console.log("useEffect: çağrıldı");
     fetchChats();
   }, [session, status]);
 
@@ -49,8 +47,6 @@ export const useChat = () => {
     // State güncellemelerini sıralı yapalım
     setInput("");
     setActiveChat(null);
-
-    console.log("Yeni sohbet oluşturuldu");
     window.scrollTo(0, 0);
   }, [session]);
 
@@ -58,8 +54,6 @@ export const useChat = () => {
   const deleteChat = useCallback(
     async (chatId: string) => {
       if (!session?.user) return;
-
-      console.log("Sohbet silme", chatId);
 
       try {
         await deleteUserChat(chatId);
@@ -194,8 +188,6 @@ export const useChat = () => {
 
   // Sohbetleri yeniden yükleme
   const fetchChats = useCallback(async () => {
-    console.log("fetchChats:çağrıldı");
-
     if (status !== "authenticated") return;
 
     try {
