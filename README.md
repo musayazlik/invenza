@@ -65,6 +65,8 @@ Projenin geliştirilmesinde kullanılan temel teknolojiler ve neden tercih edild
 
 ## 📁 Proje Yapısı
 
+Yapı için [https://github.com/musayazlik/nextjs-starter-templete](https://github.com/musayazlik/nextjs-starter-templete) github reposu kullanıldı.
+
 ```
 src/
 ├── app/
