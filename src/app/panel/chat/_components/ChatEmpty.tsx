@@ -30,45 +30,49 @@ const ChatEmpty = ({ setInput }: ChatEmptyProps) => {
         <div className="grid gap-3 sm:grid-cols-2">
           <Button
             variant="outline"
-            className="h-auto p-4 text-left flex flex-col items-start gap-2"
-            onClick={() => setInput("Stokta hangi ürünler azalmak üzere?")}
+            className="h-auto p-4  flex flex-col items-start gap-2"
+            onClick={() => setInput("Levrek balığı stok durumu nedir?")}
           >
-            <div className="font-medium">Stok Durumu</div>
+            <div className="font-medium">Stok Durumu Sorgulama</div>
             <div className="text-sm text-muted-foreground">
-              Stokta hangi ürünler azalmak üzere?
+              Levrek balığı stok durumu nedir?
             </div>
           </Button>
 
           <Button
             variant="outline"
-            className="h-auto p-4 text-left flex flex-col items-start gap-2"
-            onClick={() => setInput("En çok satılan 5 ürünü listeler misin?")}
+            className="h-auto p-4  flex flex-col items-start gap-2"
+            onClick={() => setInput("Hangi somon balığı çeşitleri mevcut?")}
           >
-            <div className="font-medium">Popüler Ürünler</div>
+            <div className="font-medium">Balık Çeşitleri</div>
             <div className="text-sm text-muted-foreground">
-              En çok satılan 5 ürünü listeler misin?
+              Hangi somon balığı çeşitleri mevcut?
             </div>
           </Button>
 
           <Button
             variant="outline"
-            className="h-auto p-4 text-left flex flex-col items-start gap-2"
-            onClick={() => setInput("Tedarikçi bilgilerini göster")}
+            className="h-auto p-4  flex flex-col items-start gap-2"
+            onClick={() =>
+              setInput(
+                "Levrek yerine kullanılabilecek benzer balık türleri nelerdir?"
+              )
+            }
           >
-            <div className="font-medium">Tedarikçi Bilgileri</div>
-            <div className="text-sm text-muted-foreground">
-              Tedarikçi bilgilerini göster
+            <div className="font-medium">Alternatif Balıklar</div>
+            <div className="text-sm text-muted-foreground w-full overflow-hidden overflow-ellipsis">
+              Levrek yerine kullanılabilecek benzer balık türleri nelerdir?
             </div>
           </Button>
 
           <Button
             variant="outline"
-            className="h-auto p-4 text-left flex flex-col items-start gap-2"
-            onClick={() => setInput("Son 7 günün stok hareketlerini özetle")}
+            className="h-auto p-4 t flex flex-col items-start gap-2"
+            onClick={() => setInput("Stokta azalan balık türleri hangileri?")}
           >
-            <div className="font-medium">Stok Hareketleri</div>
+            <div className="font-medium">Kritik Stok Bilgisi</div>
             <div className="text-sm text-muted-foreground">
-              Son 7 günün stok hareketlerini özetle
+              Stokta azalan balık türleri hangileri?
             </div>
           </Button>
         </div>
