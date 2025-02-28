@@ -2,8 +2,7 @@
 import Link from "next/link";
 import { MotionDiv, MotionP } from "@/lib/motion";
 import { staggerContainer, formItemVariant } from "@/lib/motion";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
-import { BiLoaderAlt } from "react-icons/bi";
+import { User, Mail, Lock, Loader } from "lucide-react";
 import { useRegister } from "@/hooks/auth/useRegister";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -99,7 +98,7 @@ const FormCard = () => {
                       <FormControl>
                         <div className="relative">
                           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                            <FaUser size={18} />
+                            <User size={18} />
                           </div>
                           <Input
                             {...field}
@@ -122,7 +121,7 @@ const FormCard = () => {
                       <FormControl>
                         <div className="relative">
                           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                            <FaEnvelope size={18} />
+                            <Mail size={18} />
                           </div>
                           <Input
                             {...field}
@@ -145,7 +144,7 @@ const FormCard = () => {
                       <FormControl>
                         <div className="relative">
                           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                            <FaLock size={18} />
+                            <Lock size={18} />
                           </div>
                           <Input
                             {...field}
@@ -168,7 +167,7 @@ const FormCard = () => {
                       <FormControl>
                         <div className="relative">
                           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                            <FaLock size={18} />
+                            <Lock size={18} />
                           </div>
                           <Input
                             {...field}
@@ -238,7 +237,7 @@ const FormCard = () => {
                 >
                   {isLoading ? (
                     <>
-                      <BiLoaderAlt className="mr-2 h-5 w-5 animate-spin" />
+                      <Loader className="mr-2 h-5 w-5 animate-spin" />
                       Yükleniyor...
                     </>
                   ) : (

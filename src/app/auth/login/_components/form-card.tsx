@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FaUser, FaLock } from "react-icons/fa";
-import { BiLoaderAlt } from "react-icons/bi";
+import { User, Lock, Loader } from "lucide-react";
+
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -106,7 +106,7 @@ const FormCard = () => {
                       <FormControl>
                         <div className="relative">
                           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                            <FaUser size={18} />
+                            <User size={18} />
                           </div>
                           <Input
                             {...field}
@@ -129,7 +129,7 @@ const FormCard = () => {
                       <FormControl>
                         <div className="relative">
                           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                            <FaLock size={18} />
+                            <Lock size={18} />
                           </div>
                           <Input
                             {...field}
@@ -192,7 +192,7 @@ const FormCard = () => {
                 >
                   {isLoading ? (
                     <>
-                      <BiLoaderAlt className="mr-2 h-5 w-5 animate-spin" />
+                      <Loader className="mr-2 h-5 w-5 animate-spin" />
                       Yükleniyor...
                     </>
                   ) : (
